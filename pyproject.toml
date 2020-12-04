@@ -5,6 +5,7 @@ description = "Python solutions for Advent of Code"
 authors = ["Jordan Cook"]
 readme = "README.md"
 packages = [
+    {include = "aoc_2020"},
     {include = "aoc_2023"},
 ]
 
