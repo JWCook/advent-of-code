@@ -2,7 +2,7 @@
 # https://adventofcode.com/2023/day/1
 from loguru import logger
 
-from . import read_input
+from solutions.utils import Solution, read_input
 
 digit_strs = {
     'zero': '0',
@@ -20,7 +20,7 @@ digit_strs = {
 
 def sum_line_1(line: str) -> int:
     digits = [c for c in line if c.isdigit()]
-    return int(digits[0] + digits[-1])
+    return 0 if not digits else int(digits[0] + digits[-1])
 
 
 def sum_line_2(line: str) -> int:
@@ -32,16 +32,18 @@ def sum_line_2(line: str) -> int:
         if line[pos].isdigit():
             digits += line[pos]
 
-    i = int(digits[0] + digits[-1])
-    logger.debug(f'{line} -> {digits} -> {i}')
-    return i
+    total = int(digits[0] + digits[-1])
+    logger.debug(f'{line} -> {digits} -> {total}')
+    return total
 
 
-if __name__ == '__main__':
-    data = read_input(1)
+def solve(**kwargs) -> Solution:
+    data = read_input(1, **kwargs)
 
     answer_1 = sum([sum_line_1(line) for line in data.splitlines()])
-    print(answer_1)
+    logger.info(f'Part 1: {answer_1}')
 
     answer_2 = sum([sum_line_2(line) for line in data.splitlines()])
-    print(answer_2)
+    logger.info(f'Part 2: {answer_2}')
+
+    return answer_1, answer_2

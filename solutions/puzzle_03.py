@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from loguru import logger
 
-from . import read_input
+from solutions.utils import Solution, read_input
 
 PART_CHAR = re.compile(r'.*[^\d\.]+.*')
 
@@ -107,14 +107,15 @@ def get_gear_values(parts: list[Part], asterisk_coords: list[tuple[int, int]]) -
         adjacent_part_ids = [part.id for part in parts if part.is_adjacent(x, y)]
         if len(adjacent_part_ids) == 2:
             logger.debug(
-                f'{x}, {y} is a gear with value {adjacent_part_ids[0]} * {adjacent_part_ids[1]} = {adjacent_part_ids[0] * adjacent_part_ids[1]}'
+                f'{x}, {y} is a gear with value {adjacent_part_ids[0]} * {adjacent_part_ids[1]} = '
+                f'{adjacent_part_ids[0] * adjacent_part_ids[1]}'
             )
             gear_values.append(adjacent_part_ids[0] * adjacent_part_ids[1])
     return gear_values
 
 
-if __name__ == '__main__':
-    data = read_input(3)
+def solve(**kwargs) -> Solution:
+    data = read_input(3, **kwargs)
     parts = get_valid_parts(data)
     answer_1 = sum([part.id for part in parts])
     logger.info(f'Part 1: {answer_1}')
@@ -123,3 +124,5 @@ if __name__ == '__main__':
     gears = get_gear_values(parts, asterisk_coords)
     answer_2 = sum(gears)
     logger.info(f'Part 2: {answer_2}')
+
+    return answer_1, answer_2

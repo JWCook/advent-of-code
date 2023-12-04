@@ -4,12 +4,21 @@ version = "0.1.0"
 description = "Python solutions for Advent of Code 2023"
 authors = ["Jordan Cook"]
 readme = "README.md"
+packages = [
+    {include = "solutions"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-loguru = "^0.6.0"
-pandas = "^1.5.2"
+click = ">=8.0"
+loguru = ">=0.6"
+pandas = ">=1.5"
+rich = ">=13.0"
+rich-click = ">=1.7"
 # seaborn = "^0.12.1"
+
+[tool.poetry.scripts]
+aoc = 'solutions.cli:run'
 
 [build-system]
 requires = ["poetry-core"]
@@ -18,3 +27,18 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 100
 skip-string-normalization = true
+
+[tool.isort]
+profile = 'black'
+line_length = 100
+skip_gitignore = true
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 120
+output-format = 'grouped'
+select = ['B', 'C4','C90', 'E', 'F']
+ignore = ['B023']
+target-version = 'py38'
