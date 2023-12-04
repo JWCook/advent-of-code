@@ -6,7 +6,7 @@ from typing import Any, Iterator
 
 from loguru import logger
 
-from solutions import INPUTS_DIR, SOLUTIONS_DIR
+from . import INPUTS_DIR, SOLUTIONS_DIR
 
 Solution = tuple[Any, Any]
 
@@ -15,7 +15,7 @@ def get_puzzle_modules() -> Iterator[ModuleType]:
     """Get all modules in the solutions package"""
     for module_info in iter_modules([str(SOLUTIONS_DIR)]):
         if module_info.name.startswith('puzzle_'):
-            yield import_module(f'solutions.{module_info.name}')
+            yield import_module(f'aoc_2023.solutions.{module_info.name}')
 
 
 def read_input(puzzle_id: int, test: bool = False) -> str:

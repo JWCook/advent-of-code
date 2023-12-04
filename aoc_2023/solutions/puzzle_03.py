@@ -1,11 +1,10 @@
-#!/usr/bin/env python
-# https://adventofcode.com/2023/day/3
+"""https://adventofcode.com/2023/day/3"""
 import re
 from dataclasses import dataclass
 
 from loguru import logger
 
-from solutions.utils import Solution, read_input
+from .utils import Solution, read_input
 
 PART_CHAR = re.compile(r'.*[^\d\.]+.*')
 

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from time import time
 
 import click
@@ -5,7 +6,7 @@ from loguru import logger
 from rich import print
 from rich_click import RichCommand
 
-from solutions.utils import get_puzzle_modules, set_log_level
+from aoc_2023.solutions.utils import get_puzzle_modules, set_log_level
 
 
 @click.command(cls=RichCommand)
