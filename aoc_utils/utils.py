@@ -23,7 +23,9 @@ def get_puzzle_modules(year: int) -> Iterator[ModuleType]:
 
 def read_input(puzzle_id: int, year: int, test: bool = False) -> str:
     inputs_dir = BASE_DIR / f'aoc_{year}' / 'inputs'
-    filename = f'input_{puzzle_id}_test' if test else f'input_{puzzle_id}'
+    filename = f'input_{puzzle_id:02d}'
+    if test:
+        filename += '_test'
     return (inputs_dir / filename).read_text()
 
 
@@ -37,8 +39,3 @@ def set_log_level(verbosity: int):
             logger.add(stderr, level='INFO')
         case _:
             logger.add(stderr, level='DEBUG')
-
-
-# from . import read_input, Solution
-# def solve(**kwargs) -> Solution:
-#     data = read_input(6, **kwargs)
