@@ -1,0 +1,48 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+env:
+  PY_VERSION: '3.11'
+
+jobs:
+  # Run unit tests for each supported python version
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PY_VERSION }}
+      - uses: snok/install-poetry@v1.3
+        with:
+          virtualenvs-in-project: true
+
+      # Cache packages per python version, and reuse until lockfile changes
+      - name: Cache python packages
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: poetry install -v
+
+      # Run tests with coverage report
+      - name: Run tests
+        run: poetry run aoc --test
+
+  # Run linting via pre-commit hooks
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PY_VERSION }}
+      - name: Run style checks & linting
+        uses: pre-commit/action@v3.0.0
