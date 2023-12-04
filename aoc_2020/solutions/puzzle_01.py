@@ -1,21 +1,12 @@
-#!/usr/bin/env python3
 from itertools import product
 from logging import getLogger
 from math import prod as multiply
 from random import shuffle
 from typing import Tuple
 
-from . import get_input_data
+from . import Solution, read_input
 
 logger = getLogger(__file__)
-
-
-def main():
-    numbers = list(map(int, get_input_data(1)))
-    solution_a = get_target_addends(numbers, 2020, 2)
-    logger.info(f'Solution 1a: {multiply(solution_a)}')
-    solution_b = get_target_addends(numbers, 2020, 3)
-    logger.info(f'Solution 1b: {multiply(solution_b)}')
 
 
 def get_target_addends(numbers, target_sum, num_addends=2) -> Tuple[int, ...]:
@@ -46,5 +37,13 @@ def get_target_addends(numbers, target_sum, num_addends=2) -> Tuple[int, ...]:
     return tuple([0] * num_addends)
 
 
-if __name__ == '__main__':
-    main()
+def solve(**kwargs) -> Solution:
+    data = read_input(1, **kwargs).splitlines()
+    numbers = list(map(int, data))
+
+    addends = get_target_addends(numbers, 2020, 2)
+    answer_1 = multiply(addends)
+
+    addends = get_target_addends(numbers, 2020, 3)
+    answer_2 = multiply(addends)
+    return answer_1, answer_2

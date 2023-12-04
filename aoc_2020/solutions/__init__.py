@@ -1,11 +1,7 @@
-import logging
-from os.path import abspath, dirname, join
-
-INPUTS_DIR = join(abspath(dirname(dirname(__file__))), 'inputs')
-logging.basicConfig(level='INFO')
+# ruff: noqa: F401
+from aoc_utils import Solution
+from aoc_utils import read_input as read_input_generic
 
 
-def get_input_data(day: int, split=True):
-    with open(join(INPUTS_DIR, f'input_{day}')) as f:
-        contents = f.read()
-    return contents.splitlines() if split else contents
+def read_input(puzzle_id: int, **kwargs) -> str:
+    return read_input_generic(puzzle_id, 2020, **kwargs)

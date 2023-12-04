@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from loguru import logger
 
-from .utils import Solution, read_input
+from . import Solution, read_input
 
 
 @dataclass

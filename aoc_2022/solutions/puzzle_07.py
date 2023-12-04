@@ -1,11 +1,10 @@
-#!/usr/bin/env python3
 # https://adventofcode.com/2022/day/7
 from dataclasses import dataclass, field
 from typing import Optional
 
 from loguru import logger
 
-from . import read_input
+from . import Solution, read_input
 
 FS_SIZE = 70000000
 SPACE_REQUIRED = 30000000
@@ -102,8 +101,10 @@ def find_candidate_dirs(root: Directory, space_to_delete: int) -> list[Directory
     return candidate_dirs
 
 
-if __name__ == '__main__':
-    data = read_input(7)
+def solve(**kwargs) -> Solution:
+    data = read_input(7, **kwargs)
     root = count_directory_sizes(data)
-    logger.info(f'Part 1: {get_subdir_totals(root)}')
-    logger.info(f'Part 2: {find_dir_to_delete(root).get_size()}')
+    return (
+        get_subdir_totals(root),
+        find_dir_to_delete(root).get_size(),
+    )

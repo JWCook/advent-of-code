@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
 # https://adventofcode.com/2022/day/3
-from loguru import logger
-
-from . import read_input
+from . import Solution, read_input
 
 
 def char_priority(char: str) -> int:
@@ -49,7 +46,9 @@ def get_badge_total_priority(data: str) -> int:
     return total_priority
 
 
-if __name__ == '__main__':
-    data = read_input(3)
-    logger.info(f'Part 1: {get_pack_total_priority(data)}')
-    logger.info(f'Part 2: {get_badge_total_priority(data)}')
+def solve(**kwargs) -> Solution:
+    data = read_input(3, **kwargs)
+    return (
+        get_pack_total_priority(data),
+        get_badge_total_priority(data),
+    )

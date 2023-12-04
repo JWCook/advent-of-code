@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
 # https://adventofcode.com/2022/day/4
 import re
 from logging import getLogger
 from typing import Iterator
 
-from . import read_input
+from . import Solution, read_input
 
 logger = getLogger(__name__)
 
@@ -32,7 +31,9 @@ def count_overlaps(data: str) -> int:
     return sum(1 for range_1, range_2 in parse_ranges(data) if has_overlap(range_1, range_2))
 
 
-if __name__ == '__main__':
-    data = read_input(4)
-    logger.info(f'Part 1: {count_subsets(data)}')
-    logger.info(f'Part 2: {count_overlaps(data)}')
+def solve(**kwargs) -> Solution:
+    data = read_input(4, **kwargs)
+    return (
+        count_subsets(data),
+        count_overlaps(data),
+    )

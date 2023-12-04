@@ -1,27 +1,11 @@
-#!/usr/bin/env python3
 import re
 from logging import getLogger
 
-from . import get_input_data
+from . import Solution, read_input
 
 LINE_PATTERN = re.compile(r'([0-9]+)-([0-9]+)+\s*(\w):\s*(\S+)')
 InputLine = tuple[int, int, str, str]
 logger = getLogger(__file__)
-
-
-def main():
-    input_data = get_input_data(2)
-    input_lines = [parse_line(line) for line in input_data]
-
-    valid_passwords_a = [line[3] for line in input_lines if line and is_valid_r1(*line)]
-    logger.info(
-        f'Solution 2a: {len(valid_passwords_a)} out of {len(input_data)} passwords are valid'
-    )
-
-    valid_passwords_b = [line[3] for line in input_lines if line and is_valid_r2(*line)]
-    logger.info(
-        f'Solution 2b: {len(valid_passwords_b)} out of {len(input_data)} passwords are valid'
-    )
 
 
 def parse_line(line: str) -> InputLine | None:
@@ -73,5 +57,14 @@ def is_valid_r2(pos_1: int, pos_2: int, required_char: str, password: str) -> bo
     return is_valid
 
 
-if __name__ == '__main__':
-    main()
+def solve(**kwargs) -> Solution:
+    data = read_input(2, **kwargs).splitlines()
+    input_lines = [parse_line(line) for line in data]
+
+    valid_passwords_a = [line[3] for line in input_lines if line and is_valid_r1(*line)]
+    logger.info(f'Solution 2a: {len(valid_passwords_a)} out of {len(data)} passwords are valid')
+
+    valid_passwords_b = [line[3] for line in input_lines if line and is_valid_r2(*line)]
+    logger.info(f'Solution 2b: {len(valid_passwords_b)} out of {len(data)} passwords are valid')
+
+    return len(valid_passwords_a), len(valid_passwords_b)

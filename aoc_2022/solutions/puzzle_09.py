@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
 # https://adventofcode.com/2022/day/9
 from dataclasses import dataclass, field
 
 from loguru import logger
 
-from . import read_input
+from . import Solution, read_input
 
 
 @dataclass
@@ -60,7 +59,9 @@ def move_segment(head: Point, tail: Point) -> Point:
     return tail
 
 
-if __name__ == '__main__':
-    data = read_input(9)
-    logger.info(f'Part 1: {len(find_visited(data, 2))}')
-    logger.info(f'Part 2: {len(find_visited(data, 10))}')
+def solve(**kwargs) -> Solution:
+    data = read_input(9, **kwargs)
+    return (
+        len(find_visited(data, 2)),
+        len(find_visited(data, 10)),
+    )

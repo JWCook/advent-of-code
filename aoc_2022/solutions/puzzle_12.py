@@ -3,7 +3,7 @@
 import networkx as nx
 from loguru import logger
 
-from . import read_input
+from . import Solution, read_input
 
 UNICODE_OFFSET = 96
 
@@ -108,8 +108,12 @@ def find_shortest_path_from_any_start(heightmap: HeightMap, end: int) -> int:
     return min(lengths)
 
 
-if __name__ == '__main__':
-    data = read_input(12)
+def solve(**kwargs) -> Solution:
+    data = read_input(12, **kwargs)
     heightmap, start, end = parse_map(data)
-    logger.info(f'Part 1: {find_shortest_path(heightmap, start, end)}')
-    logger.info(f'Part 2: {find_shortest_path_from_any_start(heightmap, end)}')
+    answer_1 = find_shortest_path(heightmap, start, end)
+    logger.info(f'Part 1: {answer_1}')
+
+    answer_2 = find_shortest_path_from_any_start(heightmap, end)
+    logger.info(f'Part 2: {answer_2}')
+    return answer_1, answer_2

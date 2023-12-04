@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
 from logging import getLogger
 from math import prod as multiply
 
-from . import get_input_data
+from . import Solution, read_input
 
 logger = getLogger(__file__)
 
@@ -13,16 +12,6 @@ SLOPE_INCREMENTS = [
     (7, 1),
     (1, 2),
 ]
-
-
-def main():
-    input_data = get_input_data(3)
-    n_trees = count_trees_in_path(input_data)
-    logger.info(f'Solution 3a: {n_trees}')
-
-    n_trees_list = [count_trees_in_path(input_data, x, y) for x, y in SLOPE_INCREMENTS]
-    n_trees_product = multiply(n_trees_list)
-    logger.info(f'Solution 3b: {n_trees_product}')
 
 
 def count_trees_in_path(input_data, x_increment=3, y_increment=1):
@@ -52,5 +41,13 @@ def count_trees_in_path(input_data, x_increment=3, y_increment=1):
     return path_chars.count('#')
 
 
-if __name__ == '__main__':
-    main()
+def solve(**kwargs) -> Solution:
+    data = read_input(3, **kwargs).splitlines()
+    n_trees = count_trees_in_path(data)
+    logger.info(f'Solution 3a: {n_trees}')
+
+    n_trees_list = [count_trees_in_path(data, x, y) for x, y in SLOPE_INCREMENTS]
+    n_trees_product = multiply(n_trees_list)
+    logger.info(f'Solution 3b: {n_trees_product}')
+
+    return n_trees, n_trees_product

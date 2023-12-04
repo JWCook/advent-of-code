@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
 # https://adventofcode.com/2022/day/8
-from loguru import logger
-
-from . import read_input
+from . import Solution, read_input
 
 
 def parse_trees(data: str) -> list[list[int]]:
@@ -50,13 +47,20 @@ def max_scenic_score(tree_grid: list[list[int]]) -> int:
             scenic_score *= count_visible_trees_from(tree_height, lst)
         return scenic_score
 
+    # fmt: off
     return max(
-        [get_scenic_score(x, y, tree_grid) for x in range(grid_width) for y in range(grid_height)]
+        [
+            get_scenic_score(x, y, tree_grid)
+            for x in range(grid_width)
+            for y in range(grid_height)
+        ]
     )
 
 
-if __name__ == '__main__':
-    data = read_input(8)
+def solve(**kwargs) -> Solution:
+    data = read_input(8, **kwargs)
     tree_grid = parse_trees(data)
-    logger.info(f'Part 1: {count_visible_trees(tree_grid)}')
-    logger.info(f'Part 2: {max_scenic_score(tree_grid)}')
+    return (
+        count_visible_trees(tree_grid),
+        max_scenic_score(tree_grid),
+    )

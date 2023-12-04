@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # https://adventofcode.com/2022/day/11
 import re
 from dataclasses import dataclass, field
@@ -6,7 +5,7 @@ from typing import Callable, Iterator
 
 from loguru import logger
 
-from . import read_input
+from . import Solution, read_input
 
 MonkeyMap = dict[int, 'Monkey']
 MONKEY_PATTERN = re.compile(
@@ -117,9 +116,13 @@ def monkey_business(monkeys: MonkeyMap) -> int:
     return sorted_monkeys[0].n_inspected * sorted_monkeys[1].n_inspected
 
 
-if __name__ == '__main__':
-    data = read_input(11)
+def solve(**kwargs) -> Solution:
+    data = read_input(11, **kwargs)
     monkeys = run_rounds(data, 20, divide_after_inspect=True)
-    logger.info(f'Part 1: {monkey_business(monkeys)}')
+    answer_1 = monkey_business(monkeys)
+    logger.info(f'Part 1: {answer_1}')
+
     monkeys = run_rounds(data, 10000, divide_after_inspect=False)
-    logger.info(f'Part 2: {monkey_business(monkeys)}')
+    answer_2 = monkey_business(monkeys)
+    logger.info(f'Part 2: {answer_2}')
+    return answer_1, answer_2

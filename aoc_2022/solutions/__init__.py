@@ -1,16 +1,11 @@
+# ruff: noqa: F401
 from pathlib import Path
-from sys import stderr
 
-from loguru import logger
+from aoc_utils import Solution
+from aoc_utils import read_input as read_input_generic
 
-# Comment out these lines for debug logs
-logger.remove()
-logger.add(stderr, level='INFO')
-
-INPUTS_DIR = Path(__file__).parent.parent / 'inputs'
 SOLUTIONS_DIR = Path(__file__).parent.parent / 'solutions'
 
 
-def read_input(day: int) -> str:
-    with open(INPUTS_DIR / f'input_{day}') as f:
-        return f.read()
+def read_input(puzzle_id: int, **kwargs) -> str:
+    return read_input_generic(puzzle_id, 2022, **kwargs)

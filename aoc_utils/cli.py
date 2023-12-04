@@ -6,17 +6,18 @@ from loguru import logger
 from rich import print
 from rich_click import RichCommand
 
-from aoc_2023.solutions.utils import get_puzzle_modules, set_log_level
+from aoc_utils import get_puzzle_modules, set_log_level
 
 
 @click.command(cls=RichCommand)
 @click.argument('puzzle_ids', nargs=-1, type=int)
 @click.option('-t', '--test', is_flag=True, show_default=True, default=False, help='Use test input')
 @click.option('-v', '--verbose', count=True, help='Increase logging verbosity')
-def run(puzzle_ids: tuple[int], test: bool, verbose: int):
+@click.option('-y', '--year', type=int, default=2023, help='AoC year to run')
+def run(puzzle_ids: tuple[int], test: bool, verbose: int, year: int):
     """Run the specified puzzles, or all puzzles if none are given."""
     set_log_level(verbose)
-    solution_modules = dict(enumerate(get_puzzle_modules(), start=1))
+    solution_modules = dict(enumerate(get_puzzle_modules(year), start=1))
     puzzle_ids = puzzle_ids or list(solution_modules.keys())
     total_start_time = time()
 

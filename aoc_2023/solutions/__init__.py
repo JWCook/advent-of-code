@@ -1,4 +1,7 @@
-from pathlib import Path
+# ruff: noqa: F401
+from aoc_utils import Solution
+from aoc_utils import read_input as read_input_generic
 
-INPUTS_DIR = Path(__file__).parent.parent / 'inputs'
-SOLUTIONS_DIR = Path(__file__).parent.parent / 'solutions'
+
+def read_input(puzzle_id: int, **kwargs) -> str:
+    return read_input_generic(puzzle_id, 2023, **kwargs)

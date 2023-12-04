@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
 import re
 from logging import getLogger
 
-from . import get_input_data
+from . import Solution, read_input
 
 logger = getLogger(__file__)
 
@@ -21,16 +20,6 @@ OPTIONAL_FIELDS = {'cid': 'Country ID'}
 EYE_COLORS = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
 HAIR_COLOR_PATTERN = re.compile(r'\#([0-9a-f]{6})')
 HEIGHT_RANGES = {'cm': (150, 193), 'in': (59, 76)}
-
-
-def main():
-    input_data = get_input_data(4, split=False)
-    passports = parse_passports(input_data)
-    valid_passports = get_valid_passports_r1(passports)
-    logger.info(f'Solution 4a: {len(valid_passports)} out of {len(passports)} passports are valid')
-
-    valid_passports = get_valid_passports_r2(valid_passports)
-    logger.info(f'Solution 4b: {len(valid_passports)} out of {len(passports)} passports are valid')
 
 
 def parse_passports(input_data):
@@ -85,5 +74,16 @@ def validate_height(height_str):
     return True
 
 
-if __name__ == '__main__':
-    main()
+def solve(**kwargs) -> Solution:
+    data = read_input(4, **kwargs)
+    passports = parse_passports(data)
+
+    valid_passports = get_valid_passports_r1(passports)
+    answer_1 = len(valid_passports)
+    logger.info(f'Part 1: {answer_1} out of {len(passports)} passports are valid')
+
+    valid_passports = get_valid_passports_r2(valid_passports)
+    answer_2 = len(valid_passports)
+    logger.info(f'Solution 4b: {answer_2} out of {len(passports)} passports are valid')
+
+    return answer_1, answer_2

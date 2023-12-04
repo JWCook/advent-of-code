@@ -1,11 +1,10 @@
-#!/usr/bin/env python3
 # https://adventofcode.com/2022/day/5
 import re
 from collections import deque
 
 from loguru import logger
 
-from . import read_input
+from . import Solution, read_input
 
 MOVE_PATTERN = re.compile('move (\d+) from (\d+) to (\d+)')
 
@@ -52,7 +51,15 @@ def _str_stacks(stacks):
     return '\n' + '\n'.join(stack_strs)
 
 
-if __name__ == '__main__':
-    data = read_input(5)
-    logger.info(f'Part 1: {process_crates(data)}')
-    logger.info(f'Part 2: {process_crates(data, multicrate_moves=True)}')
+def solve(**kwargs) -> Solution:
+    logger.warning('This solution is incomplete')
+    return None, None
+
+
+# I think I manually modified some input to make this work, but can't remember
+def solve2(**kwargs) -> Solution:
+    data = read_input(5, **kwargs)
+    return (
+        process_crates(data),
+        process_crates(data, multicrate_moves=True),
+    )

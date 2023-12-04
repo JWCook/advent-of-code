@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
 # https://adventofcode.com/2022/day/10
-from loguru import logger
-
-from . import read_input
+from . import Solution, read_input
 
 
 def parse_cycles(data: str) -> list[int]:
@@ -35,18 +32,20 @@ def get_pixels(cycles: list[int]) -> str:
     return pixels
 
 
-def print_pixels(pixels: str):
+def format_pixels(pixels: str) -> str:
+    grid = []
     idx = 0
     while idx < len(pixels):
-        print(pixels[idx : idx + 40])
+        grid.append(pixels[idx : idx + 40])
         idx += 40
+    return '\n'.join(grid)
 
 
-if __name__ == '__main__':
-    data = read_input(10)
-
+def solve(**kwargs) -> Solution:
+    data = read_input(10, **kwargs)
     cycles = parse_cycles(data)
-    logger.info(f'Part 1: {get_total_signal_strength(cycles)}')
-    logger.info('Part 2:')
+    answer_1 = get_total_signal_strength(cycles)
+
     pixels = get_pixels(cycles)
-    print_pixels(pixels)
+    answer_2 = format_pixels(pixels)
+    return answer_1, '\n' + answer_2

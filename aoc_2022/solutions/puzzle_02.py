@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # https://adventofcode.com/2022/day/2
 from dataclasses import dataclass, field
 from enum import Enum
@@ -6,7 +5,7 @@ from typing import Optional
 
 from loguru import logger
 
-from . import read_input
+from . import Solution, read_input
 
 
 class Shape(Enum):
@@ -123,11 +122,8 @@ def tally_scores(data: str, by_result: bool) -> int:
     return sum(Round.parse(line, by_result=by_result).get_score() for line in data.splitlines())
 
 
-def main():
-    data = read_input(2)
-    logger.info(f'Part 1: {tally_scores(data, by_result=False)}')
-    logger.info(f'Part 2: {tally_scores(data, by_result=True)}')
-
-
-if __name__ == '__main__':
-    main()
+def solve(**kwargs) -> Solution:
+    data = read_input(2, **kwargs)
+    answer_1 = tally_scores(data, by_result=False)
+    answer_2 = tally_scores(data, by_result=True)
+    return answer_1, answer_2
