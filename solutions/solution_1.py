@@ -20,7 +20,7 @@ digit_strs = {
 
 def sum_line_1(line: str) -> int:
     digits = [c for c in line if c.isdigit()]
-    return int(digits[0] + digits[-1])
+    return 0 if not digits else int(digits[0] + digits[-1])
 
 
 def sum_line_2(line: str) -> int:
@@ -37,8 +37,8 @@ def sum_line_2(line: str) -> int:
     return total
 
 
-def solve():
-    data = read_input(1)
+def solve(**kwargs):
+    data = read_input(1, **kwargs)
 
     answer_1 = sum([sum_line_1(line) for line in data.splitlines()])
     logger.info(f'Part 1: {answer_1}')

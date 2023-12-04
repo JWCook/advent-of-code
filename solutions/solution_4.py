@@ -43,8 +43,8 @@ def add_copies(cards: list[Card]):
     return cards
 
 
-def solve():
-    data = read_input('4')
+def solve(**kwargs):
+    data = read_input('4', **kwargs)
     cards = [Card.parse(i, line) for i, line in enumerate(data.splitlines())]
 
     total_score = sum([card.score() for card in cards])

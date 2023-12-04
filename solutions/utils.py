@@ -6,8 +6,9 @@ from typing import Iterator
 from solutions import INPUTS_DIR, SOLUTIONS_DIR
 
 
-def read_input(day: int) -> str:
-    return (INPUTS_DIR / f'input_{day}').read_text()
+def read_input(day: int, test: bool = False) -> str:
+    filename = f'input_{day}_test' if test else f'input_{day}'
+    return (INPUTS_DIR / filename).read_text()
 
 
 def get_solution_modules() -> Iterator[ModuleType]:

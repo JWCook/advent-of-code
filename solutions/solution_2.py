@@ -39,8 +39,8 @@ def is_valid_game(game: GameRecord) -> bool:
     return game.max_r <= 12 and game.max_g <= 13 and game.max_b <= 14
 
 
-def solve():
-    data = read_input(2)
+def solve(**kwargs):
+    data = read_input(2, **kwargs)
 
     games = [parse_line(line) for line in data.splitlines()]
     valid_games = [g for g in games if is_valid_game(g)]

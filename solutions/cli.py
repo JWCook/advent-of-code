@@ -1,12 +1,14 @@
 import click
 from rich import print
 from rich_click import RichCommand
+
 from solutions.utils import get_solution_modules
 
 
 @click.command(cls=RichCommand)
 @click.argument('solution_ids', nargs=-1, type=int)
-def run(solution_ids: tuple[int]):
+@click.option('-t', '--test', is_flag=True, show_default=True, default=False)
+def run(solution_ids: tuple[int], test: bool):
     solution_modules = {i: m for i, m in enumerate(get_solution_modules(), start=1)}
     solution_ids = solution_ids or list(solution_modules.keys())
 
@@ -18,7 +20,7 @@ def run(solution_ids: tuple[int]):
             continue
 
         print(f'[blue]Running solution [white]{solution_id}')
-        module.solve()
+        module.solve(test=test)
 
 
 if __name__ == '__main__':

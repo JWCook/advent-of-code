@@ -114,8 +114,8 @@ def get_gear_values(parts: list[Part], asterisk_coords: list[tuple[int, int]]) -
     return gear_values
 
 
-def solve():
-    data = read_input(3)
+def solve(**kwargs):
+    data = read_input(3, **kwargs)
     parts = get_valid_parts(data)
     answer_1 = sum([part.id for part in parts])
     logger.info(f'Part 1: {answer_1}')
