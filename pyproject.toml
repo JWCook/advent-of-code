@@ -27,3 +27,18 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 100
 skip-string-normalization = true
+
+[tool.isort]
+profile = 'black'
+line_length = 100
+skip_gitignore = true
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 120
+output-format = 'grouped'
+select = ['B', 'C4','C90', 'E', 'F']
+ignore = ['B023']
+target-version = 'py38'
