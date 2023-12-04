@@ -1,5 +1,5 @@
-# Advent of Code 2023
-Python solutions used to solve puzzles for [Advent of Code 2023](https://adventofcode.com/2023).
+# Advent of Code
+Python solutions used to solve puzzles for [Advent of Code](https://adventofcode.com).
 
 Installation:
 ```py

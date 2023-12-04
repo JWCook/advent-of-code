@@ -1,11 +1,15 @@
 [tool.poetry]
-name = "advent-of-code-2023"
-version = "0.1.0"
-description = "Python solutions for Advent of Code 2023"
+name = "advent-of-code"
+version = "2023.0"
+description = "Python solutions for Advent of Code"
 authors = ["Jordan Cook"]
 readme = "README.md"
 packages = [
-    {include = "solutions"}
+    {include = "aoc_2020"},
+    {include = "aoc_2021"},
+    {include = "aoc_2022"},
+    {include = "aoc_2023"},
+    {include = "aoc_utils"},
 ]
 
 [tool.poetry.dependencies]
@@ -15,10 +19,11 @@ loguru = ">=0.6"
 pandas = ">=1.5"
 rich = ">=13.0"
 rich-click = ">=1.7"
-# seaborn = "^0.12.1"
+seaborn = ">=0.13"
+networkx = "^3.2.1"
 
 [tool.poetry.scripts]
-aoc = 'solutions.cli:run'
+aoc = 'aoc_utils.cli:run'
 
 [build-system]
 requires = ["poetry-core"]
@@ -40,5 +45,5 @@ ignore_missing_imports = true
 line-length = 120
 output-format = 'grouped'
 select = ['B', 'C4','C90', 'E', 'F']
-ignore = ['B023']
-target-version = 'py38'
+ignore = ['E722']
+target-version = 'py311'

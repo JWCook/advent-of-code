@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
-# https://adventofcode.com/2023/day/2
+"""https://adventofcode.com/2023/day/2"""
 from dataclasses import dataclass
 
 from loguru import logger
 
-from solutions.utils import Solution, read_input
+from . import Solution, read_input
 
 
 @dataclass

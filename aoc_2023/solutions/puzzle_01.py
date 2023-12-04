@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-# https://adventofcode.com/2023/day/1
+"""https://adventofcode.com/2023/day/1"""
 from loguru import logger
 
-from solutions.utils import Solution, read_input
+from . import Solution, read_input
 
 digit_strs = {
     'zero': '0',
