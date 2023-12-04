@@ -1,12 +1,20 @@
-Code used to solve puzzles for [Advent of Code 2023](https://adventofcode.com/2023).
+# Advent of Code 2023
+Python solutions used to solve puzzles for [Advent of Code 2023](https://adventofcode.com/2023).
 
-Usage:
+Installation:
 ```py
 poetry install
+```
 
-# Run all:
-aoc run
+Usage:
+```yaml
+Usage: aoc [OPTIONS] [SOLUTION_IDS]...
 
-# Run one or more solutions:
-aoc run 1 2 3
+Run the specified solutions, or all solutions if none are given.
+
+╭─ Options ────────────────────────────────────────────────╮
+│ --test     -t                 Use test input             │
+│ --verbose  -v(vv)             Increase logging verbosity │
+│ --help                        Show this message and exit │
+╰──────────────────────────────────────────────────────────╯
 ```

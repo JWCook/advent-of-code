@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from loguru import logger
 
-from solutions.utils import read_input
+from solutions.utils import Solution, read_input
 
 PART_CHAR = re.compile(r'.*[^\d\.]+.*')
 
@@ -114,7 +114,7 @@ def get_gear_values(parts: list[Part], asterisk_coords: list[tuple[int, int]]) -
     return gear_values
 
 
-def solve(**kwargs):
+def solve(**kwargs) -> Solution:
     data = read_input(3, **kwargs)
     parts = get_valid_parts(data)
     answer_1 = sum([part.id for part in parts])
@@ -124,3 +124,5 @@ def solve(**kwargs):
     gears = get_gear_values(parts, asterisk_coords)
     answer_2 = sum(gears)
     logger.info(f'Part 2: {answer_2}')
+
+    return answer_1, answer_2

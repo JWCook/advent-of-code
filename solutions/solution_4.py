@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 
 from loguru import logger
 
-from solutions.utils import read_input
+from solutions.utils import Solution, read_input
 
 
 @dataclass
@@ -33,18 +33,19 @@ class Card:
 
 def add_copies(cards: list[Card]):
     for i, card in enumerate(cards):
+        logger.debug(card)
+
         # For each copy of this card, add copies of the next n_matches cards below this one
         for _ in range(card.n_copies):
             n_available = min(len(cards) - i, card.n_matches)
             for j in range(n_available):
                 cards[i + j + 1].n_copies += 1
 
-    logger.debug('\n'.join([str(x) for x in cards]))
     return cards
 
 
-def solve(**kwargs):
-    data = read_input('4', **kwargs)
+def solve(**kwargs) -> Solution:
+    data = read_input(4, **kwargs)
     cards = [Card.parse(i, line) for i, line in enumerate(data.splitlines())]
 
     total_score = sum([card.score() for card in cards])
@@ -53,3 +54,5 @@ def solve(**kwargs):
     cards = add_copies(cards)
     total_cards = sum([card.n_copies for card in cards])
     logger.info(f'Part 2: {total_cards}')
+
+    return total_score, total_cards

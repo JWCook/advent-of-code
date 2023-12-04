@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from loguru import logger
 
-from solutions.utils import read_input
+from solutions.utils import Solution, read_input
 
 
 @dataclass
@@ -39,7 +39,7 @@ def is_valid_game(game: GameRecord) -> bool:
     return game.max_r <= 12 and game.max_g <= 13 and game.max_b <= 14
 
 
-def solve(**kwargs):
+def solve(**kwargs) -> Solution:
     data = read_input(2, **kwargs)
 
     games = [parse_line(line) for line in data.splitlines()]
@@ -49,3 +49,5 @@ def solve(**kwargs):
 
     answer_2 = sum([g.max_r * g.max_g * g.max_b for g in games])
     logger.info(f'Part 2: {answer_2}')
+
+    return answer_1, answer_2

@@ -2,7 +2,7 @@
 # https://adventofcode.com/2023/day/1
 from loguru import logger
 
-from solutions.utils import read_input
+from solutions.utils import Solution, read_input
 
 digit_strs = {
     'zero': '0',
@@ -37,7 +37,7 @@ def sum_line_2(line: str) -> int:
     return total
 
 
-def solve(**kwargs):
+def solve(**kwargs) -> Solution:
     data = read_input(1, **kwargs)
 
     answer_1 = sum([sum_line_1(line) for line in data.splitlines()])
@@ -45,3 +45,5 @@ def solve(**kwargs):
 
     answer_2 = sum([sum_line_2(line) for line in data.splitlines()])
     logger.info(f'Part 2: {answer_2}')
+
+    return answer_1, answer_2
