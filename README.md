@@ -10,7 +10,7 @@ Usage:
 ```yaml
 Usage: aoc [OPTIONS] [SOLUTION_IDS]...
 
-Run the specified solutions, or all solutions if none are given.
+Run the specified puzzles, or all puzzles if none are given.
 
 ╭─ Options ────────────────────────────────────────────────╮
 │ --test     -t                 Use test input             │
