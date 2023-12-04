@@ -2,7 +2,7 @@
 import re
 from logging import getLogger
 
-from solutions import get_input_data
+from . import get_input_data
 
 logger = getLogger(__file__)
 
@@ -50,7 +50,7 @@ def get_valid_passports_r1(passports):
     """Get all valid passports, according to the rule in part 1"""
 
     def validate_passport(passport):
-        return all([field in passport for field in REQUIRED_FIELDS])
+        return all(field in passport for field in REQUIRED_FIELDS)
 
     return [p for p in passports if validate_passport(p)]
 

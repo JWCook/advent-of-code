@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # https://adventofcode.com/2022/day/10
 from loguru import logger
-from solutions import read_input
+
+from . import read_input
 
 
 def parse_cycles(data: str) -> list[int]:

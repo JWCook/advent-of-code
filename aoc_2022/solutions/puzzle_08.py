@@ -5,7 +5,7 @@ from loguru import logger
 from . import read_input
 
 
-def parse_trees(data: str) -> int:
+def parse_trees(data: str) -> list[list[int]]:
     return [[int(x) for x in line.strip()] for line in data.splitlines()]
 
 
@@ -19,7 +19,7 @@ def count_visible_trees(tree_grid: list[list[int]]) -> int:
         bot = [tree_grid[x][i] for i in range(y)]
         left = [tree_grid[i][y] for i in range(x + 1, grid_width)]
         right = [tree_grid[i][y] for i in range(x)]
-        return any([all([i < tree_height for i in lst]) for lst in [top, bot, left, right]])
+        return any(all(i < tree_height for i in lst) for lst in [top, bot, left, right])
 
     return sum(
         [1 for x in range(grid_width) for y in range(grid_height) if is_visible(x, y, tree_grid)]

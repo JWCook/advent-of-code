@@ -14,7 +14,7 @@ LINE_PATTERN = re.compile(r'(\d+)\-(\d+),(\d+)-(\d+)')
 
 def parse_ranges(data: str) -> Iterator[IntRanges]:
     for line in data.splitlines():
-        ints = [int(i) for i in LINE_PATTERN.match(line).groups()]
+        ints = [int(i) for i in LINE_PATTERN.match(line).groups()]  # type: ignore
         yield set(range(ints[0], ints[1] + 1)), set(range(ints[2], ints[3] + 1))
 
 

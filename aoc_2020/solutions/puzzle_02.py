@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 import re
 from logging import getLogger
-from typing import List, Tuple
 
-from solutions import get_input_data
+from . import get_input_data
 
 LINE_PATTERN = re.compile(r'([0-9]+)-([0-9]+)+\s*(\w):\s*(\S+)')
-InputLine = Tuple[int, int, str, str]
+InputLine = tuple[int, int, str, str]
 logger = getLogger(__file__)
 
 
@@ -25,7 +24,7 @@ def main():
     )
 
 
-def parse_line(line: str) -> InputLine:
+def parse_line(line: str) -> InputLine | None:
     """Parse an input line into min, max, character, password"""
     line = line.strip()
     if not line:

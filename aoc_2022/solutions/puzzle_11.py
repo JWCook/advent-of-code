@@ -2,11 +2,13 @@
 # https://adventofcode.com/2022/day/11
 import re
 from dataclasses import dataclass, field
-from typing import Callable, Iterator, Optional
+from typing import Callable, Iterator
 
 from loguru import logger
-from solutions import read_input
 
+from . import read_input
+
+MonkeyMap = dict[int, 'Monkey']
 MONKEY_PATTERN = re.compile(
     r'(\d+):\n\s+Starting items: (.+)\n\s*'
     r'Operation: new = (.*)\n\s*'
@@ -26,21 +28,26 @@ class Monkey:
     next_true: int = field()
     next_false: int = field()
     n_inspected: int = field(default=0)
-    modulo: Optional[int] = field(default=None)
+    modulo: int = field(default=0)
     divide_after_inspect: bool = field(default=True)
 
     @classmethod
     def parse(cls, monkey_str: str, divide_after_inspect: bool = True) -> 'Monkey':
-        tokens = MONKEY_PATTERN.match(monkey_str).groups()
+        tokens = MONKEY_PATTERN.match(monkey_str).groups()  # type: ignore
 
         # Parse operation function; None is placeholder for current item value
         op_tokens = tokens[2].split()
         lhs = None if op_tokens[0] == 'old' else int(op_tokens[0])
         rhs = None if op_tokens[2] == 'old' else int(op_tokens[2])
         if op_tokens[1] == '+':
-            operator = lambda x, y: x + y
+
+            def operator(x, y):
+                return x + y
+
         if op_tokens[1] == '*':
-            operator = lambda x, y: x * y
+
+            def operator(x, y):
+                return x * y
 
         def operation(x: int):
             return operator(lhs or x, rhs or x)
@@ -78,7 +85,7 @@ class Monkey:
             return item, self.next_false
 
 
-def run_rounds(data: str, n_rounds: int, divide_after_inspect: bool = True) -> list[Monkey]:
+def run_rounds(data: str, n_rounds: int, divide_after_inspect: bool = True) -> MonkeyMap:
     monkeys = {
         m.id: m for m in [Monkey.parse(m, divide_after_inspect) for m in data.split('Monkey ') if m]
     }
@@ -105,7 +112,7 @@ def run_rounds(data: str, n_rounds: int, divide_after_inspect: bool = True) -> l
     return monkeys
 
 
-def monkey_business(monkeys: list[Monkey]) -> int:
+def monkey_business(monkeys: MonkeyMap) -> int:
     sorted_monkeys = sorted(monkeys.values(), key=lambda m: m.n_inspected, reverse=True)
     return sorted_monkeys[0].n_inspected * sorted_monkeys[1].n_inspected
 

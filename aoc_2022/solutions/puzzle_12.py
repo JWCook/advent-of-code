@@ -2,7 +2,8 @@
 # https://adventofcode.com/2022/day/12
 import networkx as nx
 from loguru import logger
-from solutions import read_input
+
+from . import read_input
 
 UNICODE_OFFSET = 96
 

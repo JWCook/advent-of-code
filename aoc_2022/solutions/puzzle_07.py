@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # https://adventofcode.com/2022/day/7
 from dataclasses import dataclass, field
+from typing import Optional
 
 from loguru import logger
 
@@ -14,12 +15,15 @@ SPACE_REQUIRED = 30000000
 class Node:
     name: str = field()
 
+    def get_size(self) -> int:
+        raise NotImplementedError
+
 
 @dataclass
 class Directory(Node):
-    parent: 'Directory' = field(default=None)
+    parent: Optional['Directory'] = field(default=None)
     children: list['Node'] = field(default_factory=list)
-    total_size: int = field(default=None)
+    total_size: int = field(default=0)
 
     def add_node(self, node: 'Node'):
         self.children.append(node)
@@ -57,9 +61,9 @@ def count_directory_sizes(cmd_output: str) -> Directory:
         elif line.startswith('$ cd '):
             name = line[5:]
             if name == '..':
-                pwd = pwd.parent
+                pwd = pwd.parent  # type: ignore
             else:
-                pwd = pwd.get_node(name)
+                pwd = pwd.get_node(name)  # type: ignore
         elif line.startswith('dir '):
             pwd.add_node(Directory(name=line[4:], parent=pwd))
         elif line[0].isdigit():

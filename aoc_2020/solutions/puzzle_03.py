@@ -2,7 +2,7 @@
 from logging import getLogger
 from math import prod as multiply
 
-from solutions import get_input_data
+from . import get_input_data
 
 logger = getLogger(__file__)
 
@@ -37,7 +37,7 @@ def count_trees_in_path(input_data, x_increment=3, y_increment=1):
         f'infinite width; {width} spaces repeating; Slope: ({x_increment}, {y_increment})'
     )
 
-    for i in range(height):
+    for _i in range(height):
         # Pattern repeats along X axis, so 'wrap' X index to equivalent list index
         wrapped_x_index = x_index % width
         logger.debug('Indices:', y_index, x_index, wrapped_x_index)

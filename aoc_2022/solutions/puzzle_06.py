@@ -9,6 +9,7 @@ def find_marker(data: str, marker_len: int) -> int:
     for i in range(len(data)):
         if len(set(data[i : i + marker_len])) == marker_len:
             return i + marker_len
+    return -1
 
 
 if __name__ == '__main__':

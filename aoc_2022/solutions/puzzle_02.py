@@ -2,6 +2,7 @@
 # https://adventofcode.com/2022/day/2
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Optional
 
 from loguru import logger
 
@@ -54,8 +55,8 @@ LOSE_CONDITIONS = {v: k for k, v in WIN_CONDITIONS.items()}
 @dataclass
 class Round:
     opponent_shape: Shape = field()
-    player_shape: Shape = field(default=None)
-    result: Result = field(default=None)
+    player_shape: Optional[Shape] = field(default=None)
+    result: Optional[Result] = field(default=None)
 
     @classmethod
     def parse(cls, line: str, by_result: bool = False) -> 'Round':
@@ -97,7 +98,7 @@ class Round:
         """Given an opponent's shape and a player's shape, determine the result"""
         if self.opponent_shape == self.player_shape:
             return Result.DRAW
-        elif WIN_CONDITIONS[self.player_shape] == self.opponent_shape:
+        elif self.player_shape and WIN_CONDITIONS[self.player_shape] == self.opponent_shape:
             return Result.WIN
         else:
             return Result.LOSE

@@ -5,7 +5,7 @@ from math import prod as multiply
 from random import shuffle
 from typing import Tuple
 
-from solutions import get_input_data
+from . import get_input_data
 
 logger = getLogger(__file__)
 
@@ -18,7 +18,7 @@ def main():
     logger.info(f'Solution 1b: {multiply(solution_b)}')
 
 
-def get_target_addends(numbers, target_sum, num_addends=2) -> Tuple[int]:
+def get_target_addends(numbers, target_sum, num_addends=2) -> Tuple[int, ...]:
     """Get an arbitrary number of numbers from the specified list that add up to a specified sum"""
     if target_sum in numbers and 0 in numbers:
         return target_sum, 0
@@ -27,7 +27,7 @@ def get_target_addends(numbers, target_sum, num_addends=2) -> Tuple[int]:
     numbers = sorted([n for n in numbers if n < target_sum])
     number_sets = [numbers, numbers[::-1]]
     # Any additional sets will be in randomized order
-    for i in range(num_addends - 2):
+    for _ in range(num_addends - 2):
         number_set = numbers.copy()
         shuffle(number_set)
         number_sets.append(number_set)
@@ -43,7 +43,7 @@ def get_target_addends(numbers, target_sum, num_addends=2) -> Tuple[int]:
             return combination
 
     logger.error('No solution found')
-    return [None] * num_addends
+    return tuple([0] * num_addends)
 
 
 if __name__ == '__main__':

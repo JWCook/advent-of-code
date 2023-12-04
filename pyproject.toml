@@ -45,4 +45,5 @@ ignore_missing_imports = true
 line-length = 120
 output-format = 'grouped'
 select = ['B', 'C4','C90', 'E', 'F']
+ignore = ['E722']
 target-version = 'py311'
