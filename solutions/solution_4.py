@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 
 from loguru import logger
 
-from . import read_input
+from solutions.utils import read_input
 
 
 @dataclass
@@ -43,7 +43,7 @@ def add_copies(cards: list[Card]):
     return cards
 
 
-if __name__ == '__main__':
+def solve():
     data = read_input('4')
     cards = [Card.parse(i, line) for i, line in enumerate(data.splitlines())]
 
