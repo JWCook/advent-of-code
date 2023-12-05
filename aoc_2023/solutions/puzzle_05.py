@@ -1,47 +1,70 @@
 # Incomplete; brute force solution only
 """https://adventofcode.com/2023/day/5"""
+import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from hashlib import blake2b
 from os import getpid
 
 from loguru import logger
 
-from . import Solution, read_input
-from .input_05 import all_maps, seeds
+from aoc_utils import Solution, chunkify, read_input
+
+AgMap = list[tuple[int, ...]]
 
 
-def find_seed_location(seed: int) -> int:
+def parse_maps(data: str) -> tuple[list[int], list[AgMap]]:
+    """Parse seeds and maps from input data.
+    Seeds is a simple list, and each map is a list of tuples in the form:
+    (dest_range_start, src_range_start, range_length)
+    """
+
+    def _split_ints(line):
+        return [int(i) for i in line.split(' ')]
+
+    def _parse_map(map):
+        return [tuple(_split_ints(line)) for line in map.splitlines()]
+
+    tokens = [t.strip() for t in re.split(r'([\sa-z-]+:)', data) if t.strip()]
+    sections = dict(chunkify(tokens, 2))
+    seeds = _split_ints(sections.pop('seeds:'))
+    maps = [_parse_map(v) for v in sections.values()]
+    return seeds, maps
+
+
+def find_seed_location(seed: int, maps: list[AgMap]) -> int:
+    """Follow maps from a given seed to a compatible location"""
+
+    def check_map(find_src, map):
+        for dest, src, length in map:
+            if src <= find_src < src + length:
+                return dest + find_src - src
+        # If no explicit range matches, then the src value translates to dest 1:1
+        return find_src
+
     search_val = seed
-    for map in all_maps:
+    for map in maps:
         search_val = check_map(search_val, map)
     return search_val
 
 
-def check_map(find_src: int, map: list[list]):
-    """Find dest given src"""
-    for dest, src, length in map:
-        if src <= find_src < src + length:
-            diff = find_src - src
-            return dest + diff
-    return find_src
+def min_location_for_seed_ranges(seeds: list[int], maps: list[AgMap]) -> int:
+    """Find the minimum location for each seed range. At each map lookup step, we need to split
+    each src range into multiple ranges that overlap with dest ranges.
+    """
+    avail_seed_ranges = sorted(chunkify(seeds, 2))
+    logger.debug(f'Seed ranges: {avail_seed_ranges}')
+
+    return 0
 
 
-def get_seed_ranges() -> list[tuple[int, int]]:
-    """split seeds into (start, end) pairs"""
-    ranges = []
-    for i in range(0, len(seeds), 2):
-        ranges.append((seeds[i], seeds[i] + seeds[i + 1]))
-    return sorted(ranges, key=lambda x: x[0])
-
-
-def min_location_for_seed_ranges_brute_force() -> int:
-    avail_seed_pairs = get_seed_ranges()
+def min_location_for_seed_ranges_brute_force(seeds: list[int], maps: list[AgMap]) -> int:
+    avail_seed_ranges = sorted(chunkify(seeds, 2))
+    logger.debug(f'Seed ranges: {avail_seed_ranges}')
 
     min_location = None
     with ProcessPoolExecutor() as executor:
         futures = []
-        for start, end in avail_seed_pairs:
-            future = executor.submit(min_location_for_seed_range_brute_force, start, end)
+        for start, length in avail_seed_ranges:
+            future = executor.submit(min_location_for_seed_range_brute_force, start, length, maps)
             futures.append(future)
 
         for future in as_completed(futures):
@@ -50,40 +73,31 @@ def min_location_for_seed_ranges_brute_force() -> int:
                 logger.info(f'New global min found: {min_location} -> {location}')
                 min_location = location
 
-    assert min_location is not None
-    return min_location
+    return min_location  # type: ignore
 
 
-def _short_hash(value) -> str:
-    return blake2b(str(value).encode(), digest_size=4).hexdigest()
-
-
-def min_location_for_seed_range_brute_force(start, end) -> int:
-    # thread_id = _short_hash(threading.get_ident())
+def min_location_for_seed_range_brute_force(start: int, length: int, maps: list[AgMap]) -> int:
     pid = getpid()
-    logger.info(f'[{pid}] Starting worker ({start}-{end})')
+    logger.info(f'[{pid}] Starting worker ({start}-{start + length})')
     min_location = None
 
-    for seed in range(start, end):
-        location = find_seed_location(seed)
+    for seed in range(start, start + length):
+        logger.debug(f'[{pid}] {seed}')
+        location = find_seed_location(seed, maps)
         if min_location is None or location < min_location:
             logger.info(f'[{pid}] New local min found: {min_location} -> {location}')
             min_location = location
 
     logger.info(f'[{pid}] Worker complete')
-    assert min_location is not None
-    return min_location
+    return min_location  # type: ignore
 
 
 def solve(**kwargs) -> Solution:
-    data = read_input(5, **kwargs)
-    logger.debug(data)
-    locations = [find_seed_location(seed) for seed in seeds]
+    data = read_input(2023, 5, **kwargs)
+    seeds, maps = parse_maps(data)
+
+    locations = [find_seed_location(seed, maps) for seed in seeds]
     answer_1 = min(locations)
 
-    if kwargs.get('test'):
-        return answer_1, None
-
-    # answer_2 = min_location_for_seed_ranges()
-    answer_2 = min_location_for_seed_ranges_brute_force()
+    answer_2 = min_location_for_seed_ranges_brute_force(seeds, maps)
     return answer_1, answer_2

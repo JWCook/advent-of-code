@@ -1,14 +1,13 @@
 """Misc utilitiy functions that don't fit elsewhere"""
-from pathlib import Path
 import re
 from importlib import import_module
+from pathlib import Path
 from pkgutil import iter_modules
 from sys import stderr
 from types import ModuleType
-from typing import Iterator, Any
+from typing import Any, Iterator
 
 from loguru import logger
-
 
 BASE_DIR = Path(__file__).parent.parent
 LOG_FORMAT = "<g>{time:HH:mm:ss}</> | <lvl>{level: <8}</>| <cyan>{module}</> | {message}"
