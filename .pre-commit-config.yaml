@@ -25,3 +25,4 @@ repos:
     hooks:
       - id: mypy
         files: solutions
+        additional_dependencies: [types-requests]
