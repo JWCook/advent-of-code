@@ -1,8 +1,8 @@
 """https://adventofcode.com/{{year}}/day/{{day}}"""
 from loguru import logger
-from . import Solution, read_input
+from aoc_utils import Solution, read_input
 
 
 def solve(**kwargs) -> Solution:
-    data = read_input({{day}}, **kwargs)
+    data = read_input({{year}}, {{day}}, **kwargs)
     return (None, None)

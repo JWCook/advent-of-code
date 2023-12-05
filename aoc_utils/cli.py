@@ -6,7 +6,8 @@ from loguru import logger
 from rich import print
 from rich_click import RichCommand
 
-from aoc_utils import create_template, get_puzzle_modules, set_log_level
+from aoc_utils.templates import create_template
+from aoc_utils.utils import ModuleMap, get_puzzle_modules, set_log_level
 
 
 @click.command(cls=RichCommand)
@@ -22,26 +23,32 @@ def run(puzzle_ids: tuple[int], test: bool, year: int, create: bool, verbose: in
         create_templates(puzzle_ids, year)
         return
 
-    solution_modules = dict(enumerate(get_puzzle_modules(year), start=1))
-    puzzle_ids = puzzle_ids or list(solution_modules.keys())
-    total_start_time = time()
+    puzzle_modules = dict(enumerate(get_puzzle_modules(year), start=1))
+    puzzle_ids = puzzle_ids or list(puzzle_modules.keys())
 
+    start_time = time()
     for puzzle_id in puzzle_ids:
-        try:
-            module = solution_modules[puzzle_id]
-        except KeyError:
-            print(f'[red]No puzzle found for id [white]{puzzle_id}')
-            continue
+        run_puzzle(puzzle_id, puzzle_modules, test)
 
-        print(f'[blue]Running puzzle [white]{puzzle_id}')
-        start_time = time()
-        answer_1, answer_2 = module.solve(test=test)
+    if len(puzzle_ids) > 1:
+        logger.info(f'Completed {len(puzzle_ids)} puzzles in {time() - start_time:.3f}s')
 
-        logger.info(f'Completed in {time() - start_time:.3f}s')
-        print(f'  [green]⟫ [blue]Solution {puzzle_id}a: [white]{answer_1}')
-        print(f'  [green]⟫ [blue]Solution {puzzle_id}b: [white]{answer_2}')
 
-    logger.info(f'Completed {len(puzzle_ids)} puzzles in {time() - total_start_time:.3f}s')
+def run_puzzle(puzzle_id: int, puzzle_modules: ModuleMap, test: bool):
+    """Run a single puzzle and print the results and timing"""
+    try:
+        module = puzzle_modules[puzzle_id]
+    except KeyError:
+        print(f'[red]No puzzle found for id [white]{puzzle_id}')
+        return
+
+    print(f'[blue]Running puzzle [white]{puzzle_id}')
+    start_time = time()
+    answer_1, answer_2 = module.solve(test=test)
+
+    logger.info(f'Completed in {time() - start_time:.3f}s')
+    print(f'  [green]⟫ [blue]Solution {puzzle_id}a: [white]{answer_1}')
+    print(f'  [green]⟫ [blue]Solution {puzzle_id}b: [white]{answer_2}')
 
 
 def create_templates(puzzle_ids: tuple[int], year: int):
@@ -51,10 +58,7 @@ def create_templates(puzzle_ids: tuple[int], year: int):
 
     for puzzle_id in puzzle_ids:
         create_template(year, puzzle_id)
-
-    print(
-        f'[blue]Created files for puzzle(s) [white]{year}.' + ",".join([str(i) for i in puzzle_ids])
-    )
+        print(f'[blue]Created files for puzzle [white]{year}.{puzzle_id}')
 
 
 if __name__ == '__main__':

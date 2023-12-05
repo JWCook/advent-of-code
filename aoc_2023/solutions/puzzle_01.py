@@ -1,7 +1,7 @@
 """https://adventofcode.com/2023/day/1"""
 from loguru import logger
 
-from . import Solution, read_input
+from aoc_utils import Solution, read_input
 
 digit_strs = {
     'zero': '0',
@@ -37,7 +37,7 @@ def sum_line_2(line: str) -> int:
 
 
 def solve(**kwargs) -> Solution:
-    data = read_input(1, **kwargs)
+    data = read_input(2023, 1, **kwargs)
 
     answer_1 = sum([sum_line_1(line) for line in data.splitlines()])
     logger.info(f'Part 1: {answer_1}')

@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 
 from loguru import logger
 
-from . import Solution, read_input
+from aoc_utils import Solution, read_input
 
 
 @dataclass
@@ -44,7 +44,7 @@ def add_copies(cards: list[Card]):
 
 
 def solve(**kwargs) -> Solution:
-    data = read_input(4, **kwargs)
+    data = read_input(2023, 4, **kwargs)
     cards = [Card.parse(i, line) for i, line in enumerate(data.splitlines())]
 
     total_score = sum([card.score() for card in cards])

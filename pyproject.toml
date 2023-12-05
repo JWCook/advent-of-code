@@ -40,6 +40,7 @@ skip-string-normalization = true
 profile = 'black'
 line_length = 100
 skip_gitignore = true
+known_local_folder = ['aoc_utils']
 
 [tool.mypy]
 ignore_missing_imports = true

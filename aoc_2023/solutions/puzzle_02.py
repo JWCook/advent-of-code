@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from loguru import logger
 
-from . import Solution, read_input
+from aoc_utils import Solution, read_input
 
 
 @dataclass
@@ -39,7 +39,7 @@ def is_valid_game(game: GameRecord) -> bool:
 
 
 def solve(**kwargs) -> Solution:
-    data = read_input(2, **kwargs)
+    data = read_input(2023, 2, **kwargs)
 
     games = [parse_line(line) for line in data.splitlines()]
     valid_games = [g for g in games if is_valid_game(g)]

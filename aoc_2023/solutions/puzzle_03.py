@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from loguru import logger
 
-from . import Solution, read_input
+from aoc_utils import Solution, read_input
 
 PART_CHAR = re.compile(r'.*[^\d\.]+.*')
 
@@ -114,7 +114,7 @@ def get_gear_values(parts: list[Part], asterisk_coords: list[tuple[int, int]]) -
 
 
 def solve(**kwargs) -> Solution:
-    data = read_input(3, **kwargs)
+    data = read_input(2023, 3, **kwargs)
     parts = get_valid_parts(data)
     answer_1 = sum([part.id for part in parts])
     logger.info(f'Part 1: {answer_1}')
