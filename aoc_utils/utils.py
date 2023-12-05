@@ -15,10 +15,10 @@ from requests_cache import CachedSession
 Solution = tuple[Any, Any]
 
 BASE_DIR = Path(__file__).parent.parent
-PUZZLE_TEMPLATE = Path(__file__).parent / 'puzzle.py.jinja'
-MODULE_PATTERN = re.compile(r'puzzle_(\d+)$')
-
 INPUT_URL = 'https://adventofcode.com/{year}/day/{day}/input'
+LOG_FORMAT = "<g>{time:HH:mm:ss}</> | <lvl>{level: <8}</>| <cyan>{module}</> | {message}"
+MODULE_PATTERN = re.compile(r'puzzle_(\d+)$')
+PUZZLE_TEMPLATE = Path(__file__).parent / 'puzzle.py.jinja'
 SESSION_FILE = BASE_DIR / '.session'
 
 
@@ -99,10 +99,12 @@ def read_input(puzzle_id: int, year: int, test: bool = False) -> str:
 def set_log_level(verbosity: int):
     """Set logging level based on CLI verbosity option"""
     logger.remove()
+    level = ''
     match verbosity:
         case 0:
-            logger.add(stderr, level='WARNING')
+            level = 'WARNING'
         case 1:
-            logger.add(stderr, level='INFO')
+            level = 'INFO'
         case _:
-            logger.add(stderr, level='DEBUG')
+            level = 'DEBUG'
+    logger.add(stderr, format=LOG_FORMAT, level=level)
