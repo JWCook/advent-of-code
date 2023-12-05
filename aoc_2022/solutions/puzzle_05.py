@@ -6,7 +6,7 @@ from loguru import logger
 
 from . import Solution, read_input
 
-MOVE_PATTERN = re.compile('move (\d+) from (\d+) to (\d+)')
+MOVE_PATTERN = re.compile(r'move (\d+) from (\d+) to (\d+)')
 
 
 def process_crates(data: str, multicrate_moves: bool = False) -> str:

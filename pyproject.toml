@@ -5,22 +5,23 @@ description = "Python solutions for Advent of Code"
 authors = ["Jordan Cook"]
 readme = "README.md"
 packages = [
-    {include = "aoc_2020"},
-    {include = "aoc_2021"},
-    {include = "aoc_2022"},
-    {include = "aoc_2023"},
-    {include = "aoc_utils"},
+    { include = "aoc_2020" },
+    { include = "aoc_2021" },
+    { include = "aoc_2022" },
+    { include = "aoc_2023" },
+    { include = "aoc_utils" },
 ]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 click = ">=8.0"
+jinja2 = ">=3.0"
 loguru = ">=0.6"
+networkx = ">3.0"
 pandas = ">=1.5"
 rich = ">=13.0"
 rich-click = ">=1.7"
 seaborn = ">=0.13"
-networkx = "^3.2.1"
 
 [tool.poetry.scripts]
 aoc = 'aoc_utils.cli:run'
@@ -44,6 +45,6 @@ ignore_missing_imports = true
 [tool.ruff]
 line-length = 120
 output-format = 'grouped'
-select = ['B', 'C4','C90', 'E', 'F']
+select = ['B', 'C4', 'C90', 'E', 'F']
 ignore = ['E722']
 target-version = 'py311'

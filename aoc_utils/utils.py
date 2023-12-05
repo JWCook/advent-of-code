@@ -6,11 +6,35 @@ from sys import stderr
 from types import ModuleType
 from typing import Any, Iterator
 
+from jinja2 import Template
 from loguru import logger
 
 Solution = tuple[Any, Any]
 BASE_DIR = Path(__file__).parent.parent
+PUZZLE_TEMPLATE = Path(__file__).parent / 'puzzle.py.jinja'
 MODULE_PATTERN = re.compile(r'puzzle_(\d+)$')
+
+
+def create_template(year: int, puzzle_id: int):
+    """Create template files for a new puzzle"""
+    # Make parent directories
+    year_dir = BASE_DIR / f'aoc_{year}'
+    inputs_dir = year_dir / 'inputs'
+    inputs_dir.mkdir(parents=True, exist_ok=True)
+    solutions_dir = year_dir / 'solutions'
+    solutions_dir.mkdir(exist_ok=True)
+
+    # Create empty input files
+    input_file = inputs_dir / f'input_{puzzle_id:02d}'
+    input_file.touch()
+    input_test_file = inputs_dir / f'input_{puzzle_id:02d}_test'
+    input_test_file.touch()
+
+    # Create solution file from template
+    puzzle_file = solutions_dir / f'puzzle_{puzzle_id:02d}.py'
+    if not puzzle_file.exists():
+        template = Template(PUZZLE_TEMPLATE.read_text())
+        puzzle_file.write_text(template.render(year=year, day=puzzle_id))
 
 
 def get_puzzle_modules(year: int) -> Iterator[ModuleType]:
