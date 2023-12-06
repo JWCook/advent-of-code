@@ -7,10 +7,10 @@ poetry install
 ```
 
 Usage:
-```toml
+```ini
 Usage: aoc [OPTIONS] [PUZZLE_IDS]...
 
-Run the specified puzzles, or all puzzles if none are given.
+Run the specified puzzles, or all puzzles for the year if none are given.
 
 ╭─ Options ────────────────────────────────────────────────────────╮
 │ --test     -t                 Use test input                     │
