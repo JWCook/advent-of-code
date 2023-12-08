@@ -1,4 +1,5 @@
 """https://adventofcode.com/2023/day/8"""
+import math
 from dataclasses import dataclass
 from itertools import cycle
 
@@ -23,7 +24,7 @@ def parse_list(data: str) -> tuple[list[Node], str]:
     for line in lines[2:]:
         name, children = line.split(' = ')
         node_strs[name] = children.strip('()').split(', ')
-        node_objs[name] = Node(name, None, None)
+        node_objs[name] = Node(name, None, None)  # type: ignore
 
     for name, (left_name, right_name) in reversed(node_strs.items()):
         node_objs[name].left = node_objs[left_name]
@@ -40,7 +41,6 @@ def follow_directions(nodes: list[Node], directions: str) -> int:
     moves = 0
     for d in cycle(directions):
         cur_node = cur_node.left if d == 'L' else cur_node.right
-        # logger.debug(f'[{moves}] Moved {d} to {cur_node.name}')
         moves += 1
         if cur_node == end_node:
             logger.info(f'Found target node after {moves} moves')
@@ -50,26 +50,26 @@ def follow_directions(nodes: list[Node], directions: str) -> int:
 
 def follow_ghost_directions(nodes: list[Node], directions: str) -> int:
     start_nodes = [node for node in nodes if node.name.endswith('A')]
-    cur_nodes = start_nodes[:]
-    end_state = 'Z' * len(start_nodes)
+    cycle_lengths = []
 
-    moves = 0
-    for d in cycle(directions):
-        cur_nodes = [node.left if d == 'L' else node.right for node in cur_nodes]
-        moves += 1
-        state = "".join(node.name[-1] for node in cur_nodes)
-        if moves % 1000000 == 0:
-            logger.debug(f'[{moves}]: {state}')
+    for i, node in enumerate(start_nodes):
+        cur_node = node
+        moves = 0
+        for d in cycle(directions):
+            cur_node = cur_node.left if d == 'L' else cur_node.right
+            moves += 1
+            if cur_node.name.endswith('Z'):
+                logger.info(f'[{i} Found target nodes after {moves} moves')
+                cycle_lengths.append(moves)
+                break
 
-        if state == end_state:
-            logger.info(f'Found target nodes after {moves} moves')
-            break
-    return moves
+    return math.lcm(*cycle_lengths)
 
 
 def solve(**kwargs) -> Solution:
     data = read_input(2023, 8, **kwargs)
     nodes, directions = parse_list(data)
-    moves_1 = follow_directions(nodes, directions)
-    moves_2 = follow_ghost_directions(nodes, directions)
-    return moves_1, moves_2
+    return (
+        follow_directions(nodes, directions),
+        follow_ghost_directions(nodes, directions),
+    )
