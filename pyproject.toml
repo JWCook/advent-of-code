@@ -24,6 +24,7 @@ requests-cache = ">=1.1"
 rich = ">=13.0"
 rich-click = ">=1.7"
 seaborn = ">=0.13"
+shapely = ">=2.0"
 
 [tool.poetry.scripts]
 aoc = 'aoc_utils.cli:run'

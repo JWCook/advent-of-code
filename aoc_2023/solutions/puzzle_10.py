@@ -1,5 +1,6 @@
 """https://adventofcode.com/2023/day/10"""
 from loguru import logger
+from shapely.geometry import Point, Polygon
 
 from aoc_utils import Solution, read_input
 
@@ -11,11 +12,13 @@ PIPE_CHARS = {
     '7': '┐',
     'F': '┌',
     'S': '╋',
+    '-': '─',
+    '|': '│',
 }
-CONNECTS_N = '└┘|╋'
-CONNECTS_S = '┌┐|╋'
-CONNECTS_E = '└┌0-╋'
-CONNECTS_W = '┘┐-╋'
+CONNECTS_N = '└┘│╋'
+CONNECTS_S = '┌┐│╋'
+CONNECTS_E = '└┌0─╋'
+CONNECTS_W = '┘┐─╋'
 DIRECTIONS = {
     CONNECTS_N: (CONNECTS_S, 0, -1),
     CONNECTS_S: (CONNECTS_N, 0, 1),
@@ -35,7 +38,7 @@ def find_start(grid: list[str]) -> Coords:
     raise ValueError('No start found')
 
 
-def find_next(grid, x, y, prev_x, prev_y) -> Coords:
+def find_next(grid, x, y, prev_x, prev_y) -> Coords:  # type: ignore
     """Find the next pipe in the path"""
     char = grid[y][x]
     logger.debug(f'Current: {char}({x}, {y}) Prev: {grid[prev_y][prev_x]}({prev_x}, {prev_y})')
@@ -55,7 +58,7 @@ def find_next(grid, x, y, prev_x, prev_y) -> Coords:
 
 
 def find_loop(grid: list[str]) -> list[Coords]:
-    """Starting at the S/╋, find a loop in the grid as a list of coordinates"""
+    """Find a loop in the grid from the given start point, as a list of coordinates"""
     start = find_start(grid)
     next_pos = find_next(grid, *start, *start)
     path = [start, next_pos]
@@ -67,11 +70,59 @@ def find_loop(grid: list[str]) -> list[Coords]:
     return path
 
 
+def clean_grid(grid, path):
+    loop_grid = [['.' for _ in range(len(grid[0]))] for _ in range(len(grid))]
+    for x, y in path:
+        loop_grid[y][x] = grid[y][x]
+    return loop_grid
+
+
+# Not used, but the puzzle could have been solved this way
+def expand_grid(grid: list[str], path: list[Coords]) -> list[str]:
+    """Enlarge the grid by 4x, to properly show gaps in between parallel pipes"""
+    expanded_grid = [['.' for _ in range(len(grid[0]) * 2)] for _ in range(len(grid) * 2)]
+    prev_x, prev_y = path[0]
+    for next_x, next_y in path[1:]:
+        expanded_grid[prev_y * 2][prev_x * 2] = grid[prev_y][prev_x]
+        gap_x = (prev_x + next_x) * 2 // 2
+        gap_y = (prev_y + next_y) * 2 // 2
+        expanded_grid[gap_y][gap_x] = '╋'
+        prev_x, prev_y = next_x, next_y
+
+    expanded_grid[prev_y * 2][prev_x * 2] = grid[prev_y][prev_x]
+    return [''.join(row) for row in expanded_grid]
+
+
+def get_inside_points(grid: list[str], path: list[Coords]) -> list[Coords]:
+    """Naive way to get the number of discrete points inside the loop. Too lazy for flood fill.
+    Polygon.area won't work because we're not considering gaps between adjacent parallel pipes.
+    """
+    polygon = Polygon(path)
+    all_coords = [(x, y) for x in range(len(grid[0])) for y in range(len(grid))]
+    return [(x, y) for (x, y) in all_coords if Point(x, y).within(polygon)]
+
+
+def format_solution(grid, path, inside_points):
+    clean_grid = [['.' for _ in range(len(grid[0]))] for _ in range(len(grid))]
+    for x, y in path:
+        clean_grid[y][x] = grid[y][x]
+    for x, y in inside_points:
+        clean_grid[y][x] = '◘'
+
+    with open('input_10_formatted', 'w') as f:
+        for row in clean_grid:
+            f.write(''.join(row) + '\n')
+
+
 def solve(**kwargs) -> Solution:
     data = read_input(2023, 10, **kwargs)
     grid = parse_grid(data)
-    logger.info('\n'.join(grid))
+    logger.info('\n' + '\n'.join(grid))
 
     path = find_loop(grid)
     answer_1 = int((len(path) - 1) / 2)
-    return (answer_1, None)
+
+    inside_points = get_inside_points(grid, path)
+    answer_2 = len(inside_points)
+    format_solution(grid, path, inside_points)
+    return (answer_1, answer_2)
