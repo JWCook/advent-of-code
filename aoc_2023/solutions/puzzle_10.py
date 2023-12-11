@@ -77,22 +77,6 @@ def clean_grid(grid, path):
     return loop_grid
 
 
-# Not used, but the puzzle could have been solved this way
-def expand_grid(grid: list[str], path: list[Coords]) -> list[str]:
-    """Enlarge the grid by 4x, to properly show gaps in between parallel pipes"""
-    expanded_grid = [['.' for _ in range(len(grid[0]) * 2)] for _ in range(len(grid) * 2)]
-    prev_x, prev_y = path[0]
-    for next_x, next_y in path[1:]:
-        expanded_grid[prev_y * 2][prev_x * 2] = grid[prev_y][prev_x]
-        gap_x = (prev_x + next_x) * 2 // 2
-        gap_y = (prev_y + next_y) * 2 // 2
-        expanded_grid[gap_y][gap_x] = '╋'
-        prev_x, prev_y = next_x, next_y
-
-    expanded_grid[prev_y * 2][prev_x * 2] = grid[prev_y][prev_x]
-    return [''.join(row) for row in expanded_grid]
-
-
 def get_inside_points(grid: list[str], path: list[Coords]) -> list[Coords]:
     """Naive way to get the number of discrete points inside the loop. Too lazy for flood fill.
     Polygon.area won't work because we're not considering gaps between adjacent parallel pipes.
@@ -124,5 +108,5 @@ def solve(**kwargs) -> Solution:
 
     inside_points = get_inside_points(grid, path)
     answer_2 = len(inside_points)
-    format_solution(grid, path, inside_points)
+    # format_solution(grid, path, inside_points)
     return (answer_1, answer_2)
