@@ -10,7 +10,7 @@ from typing import Any, Iterator
 from loguru import logger
 
 BASE_DIR = Path(__file__).parent.parent
-LOG_FORMAT = "<g>{time:HH:mm:ss}</> | <lvl>{level: <8}</>| <cyan>{module}</> | {message}"
+LOG_FORMAT = '<g>{time:HH:mm:ss}</> | <lvl>{level: <8}</>| <cyan>{module}</> | {message}'
 MODULE_PATTERN = re.compile(r'puzzle_(\d+)$')
 
 ModuleMap = dict[int, ModuleType]

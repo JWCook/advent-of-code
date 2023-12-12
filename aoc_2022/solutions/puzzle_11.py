@@ -63,7 +63,7 @@ class Monkey:
 
     @property
     def items_str(self) -> str:
-        return ", ".join([str(i) for i in self.items])
+        return ', '.join([str(i) for i in self.items])
 
     def inspect_items(self) -> Iterator[tuple[int, int]]:
         for item in self.items:

@@ -4,7 +4,7 @@ import seaborn as sns
 from . import SOLUTIONS_DIR, read_input
 from .puzzle_09 import find_visited
 
-sns.set_theme(style="darkgrid")
+sns.set_theme(style='darkgrid')
 
 
 def plot_visited(data: str, n_segments: int):

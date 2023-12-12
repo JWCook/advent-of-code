@@ -33,22 +33,23 @@ aoc = 'aoc_utils.cli:run'
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 100
-skip-string-normalization = true
-
-[tool.isort]
-profile = 'black'
-line_length = 100
-skip_gitignore = true
-known_local_folder = ['aoc_utils']
-
 [tool.mypy]
 ignore_missing_imports = true
 
 [tool.ruff]
-line-length = 120
+fix = true
+unsafe-fixes = true
+line-length = 100
 output-format = 'grouped'
 select = ['B', 'C4', 'C90', 'E', 'F']
 ignore = ['E722']
 target-version = 'py311'
+
+[tool.ruff.format]
+quote-style = 'single'
+
+[tool.ruff.lint.isort]
+known-first-party = ['test']
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 120
