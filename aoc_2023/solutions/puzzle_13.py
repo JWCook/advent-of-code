@@ -8,15 +8,14 @@ from aoc_utils import Solution, read_input
 
 def find_mirror_vertical(stage: list[str], skip: int = -1) -> int:
     rotated = [''.join(c) for c in zip(*stage, strict=True)]
-    idx = find_mirror_horizontal(rotated, skip=skip)
-    return idx
+    return find_mirror_horizontal(rotated, skip=skip)
 
 
 def find_mirror_horizontal(stage: list[str], skip: int = -1) -> int:
     prev_line = stage[0]
     for i, line in enumerate(stage[1:]):
         if line == prev_line and (i + 1 != skip) and validate_mirror_line(stage, i):
-            logger.debug(f'Found line: {i} ({line})')
+            logger.debug(f'Found mirro line: {i} ({line})')
             return i + 1
         prev_line = line
     return 0
@@ -24,51 +23,49 @@ def find_mirror_horizontal(stage: list[str], skip: int = -1) -> int:
 
 def validate_mirror_line(stage: list[str], idx: int) -> bool:
     logger.debug(f'Validate mirror line {idx} ({stage[idx]})')
+
     for i in range(1, len(stage) - idx):
         logger.debug(f'Compare {idx+i} & {idx-i+1}:\n{stage[idx+i]}\n{stage[idx-i+1]}')
         try:
-            if idx - i + 1 < 0:
+            opposite_idx = idx - i + 1
+            if opposite_idx < 0:
                 raise IndexError
-            if stage[idx + i] != stage[idx - i + 1]:
+            if stage[idx + i] != stage[opposite_idx]:
                 logger.debug('  Not a match')
                 return False
+        # Reached the edge; no more comparisons needed
         except IndexError:
             return True
+
     return True
 
 
-def mirror_score(stage: list[str]) -> int:
-    if n_cols := find_mirror_horizontal(stage):
-        score = n_cols * 100
+def find_mirror(stage, skip=(None, -1)) -> tuple[str, int, int]:
+    # skip = axis and index of previously found mirror line
+    skip_h = skip[1] if skip[0] == 'h' else -1
+    skip_v = skip[1] if skip[0] == 'v' else -1
+    if idx := find_mirror_horizontal(stage, skip_h):
+        return ('h', idx, idx * 100)
     else:
-        score = find_mirror_vertical(stage)
-    logger.debug(f'Score: {score}')
-    return score
+        idx = find_mirror_vertical(stage, skip_v)
+        return ('v', idx, idx)
 
 
-def get_mirror_idx(stage, skip=(None, -1)):
-    axis, idx = skip
-    if n_cols := find_mirror_horizontal(stage, skip=idx if axis == 'h' else None):
-        return ('h', n_cols)
-    else:
-        n_cols = find_mirror_vertical(stage, skip=idx if axis == 'v' else None)
-        return ('v', n_cols)
+def find_alt_mirror(stage: list[str]) -> int:
+    mirror_idx = find_mirror(stage)[:2]
 
-
-def mirror_score_2(stage: list[str]) -> int:
-    mirror_idx = get_mirror_idx(stage)
-
+    # Try flipping each bit and test if a different mirror line is found
     for i in range(len(stage[0])):
         for j in range(len(stage)):
-            logger.debug(f'Testing {i}, {j}')
-            stage2 = [list(s) for s in stage]
-            stage2[j][i] = '.' if stage2[j][i] == '#' else '#'
-            test_mirror_idx = get_mirror_idx([''.join(s) for s in stage2], skip=mirror_idx)
-            if test_mirror_idx[1] and test_mirror_idx != mirror_idx:
-                axis, score = test_mirror_idx
-                new_score = score * 100 if axis == 'h' else score
-                logger.info(f'New score: {new_score} ({axis}: {i}, {j})')
-                return new_score
+            flipped_bit = '.' if stage[j][i] == '#' else '#'
+            flipped_line = stage[j][:i] + flipped_bit + stage[j][i + 1 :]
+            axis, idx, score = find_mirror(
+                stage[:j] + [flipped_line] + stage[j + 1 :], skip=mirror_idx
+            )
+
+            if idx and (axis, idx) != mirror_idx:
+                logger.info(f'New idx: {idx} ({axis}: {i}, {j})')
+                return score
 
     raise ValueError
 
@@ -77,6 +74,6 @@ def solve(**kwargs) -> Solution:
     data = read_input(2023, 13, **kwargs)
     stages = [s.strip().splitlines() for s in re.split(r'\n\n', data)]
     return (
-        sum(mirror_score(s) for s in stages),
-        sum(mirror_score_2(s) for s in stages),
+        sum(find_mirror(s)[-1] for s in stages),
+        sum(find_alt_mirror(s) for s in stages),
     )
